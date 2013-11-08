@@ -9,6 +9,7 @@ require_once("connect.php");
 $email = ""; 
 $firstName = "";
 $lastName = "";
+$birthday = "";
 
  
 
