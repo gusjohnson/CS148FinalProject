@@ -6,19 +6,21 @@
 
 include("/usr/local/uvm-inc/gjohnso4.inc");
 
-$databaseName="GJOHNSO4_SSE";        
+$databaseName="GJOHNSO4_OSS";        
 
 $dsn = 'mysql:host=webdb.uvm.edu;dbname=GJOHNSO4_OSS';
 
 function dbConnect(){
     global $db, $dsn, $db_A_username, $db_A_password;
 
-    if (!$db) $db = new PDO($dsn . $dbName, $db_A_username, $db_A_password); 
-        if (!$db) {
+    if (!$db) {
+        $db = new PDO($dsn . $dbName, $db_A_username, $db_A_password);
+    }
+    if (!$db) {
           echo '<p>A You are NOT connected to the database.</p>';
           return 0;
         } else {
-             //echo '<p>A You are connected to the database.</p>';
+          // echo '<p>You are connected to the database.</p>';
           return $db;
         }
 } 
