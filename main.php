@@ -1,4 +1,10 @@
 <?php
+
+$baseURL = "http://www.uvm.edu/~gjohnso4/";
+$folderPath = "cs148/assignment7.1/";
+// full URL of this form 
+$yourURL = $baseURL . $folderPath . "main.php";
+
 require_once("connect.php");
 
 //############################################################################# 
@@ -9,9 +15,33 @@ $email = "";
 $firstName = "";
 $lastName = "";
 $birthday = "";
+$userName = getenv('REMOTE_USER');
 
+if (isset($_POST["btnSubmit"])) {
 
+$fromPage = getenv("http_referer");
 
+if ($fromPage != $yourURL) {
+die("<p>Sorry you cannot access this page. Security breach detected and reported.</p>");
+}
+    
+
+// gets form values
+$email = htmlentities($_POST["txtEmail"], ENT_QUOTES, "UTF-8");
+$firstName = htmlentities($_POST["txtfirstName"], ENT_QUOTES, "UTF-8");
+$lastName = htmlentities($_POST["txtlastName"], ENT_QUOTES, "UTF-8");
+
+// e-mail variables
+$messageA = "<h>Thanks for your submission.</h>";
+$messageB = "<p>Here is the data you entered:<br><br>E-mail: " . $email. "<br>";
+$messageB .= "First name: " . $firstName . "<br>Last name: " . $lastName . "</p>";
+$messageC = "";
+
+$subject = "UVM Skateboarding Database Contribution";
+include_once('mailMessage.php');
+$mailed = sendMail($email, $subject, $messageA . $messageB . $messageC);
+
+} //btnSubmit actions
 
 include ("top.php");
 
@@ -23,20 +53,16 @@ print '<body id="' . $file_name . '">';
 print "\n\n";
 
 include ("header.php");
-print "\n\n";
+//print "\n\n";
 
 include ("menu.php");
 ?> 
 
+
 <article>
     <h1>Online Skate Shop</h1>
-    <p>
-        Welcome to my website. Please register below.
-
-        <br>
-
-    </p>
-
+    
+    <p>Welcome. Please click "LOG IN" above to proceed.</p>
 
     <!--   Take out enctype line    --> 
     <form action="<? print $_SERVER['PHP_SELF']; ?>" 
@@ -80,7 +106,7 @@ include ("menu.php");
         </fieldset>                     
 
     </form>
-
+    <br>
 
 </article> 
 

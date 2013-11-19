@@ -6,9 +6,9 @@
 
 include("/usr/local/uvm-inc/gjohnso4.inc");
 
-$databaseName="GJOHNSO4_OSS";        
+$databaseName="GJOHNSO4_downtown";        
 
-$dsn = 'mysql:host=webdb.uvm.edu;dbname=GJOHNSO4_OSS';
+$dsn = 'mysql:host=webdb.uvm.edu;dbname=GJOHNSO4_downtown';
 
 function dbConnect(){
     global $db, $dsn, $db_A_username, $db_A_password;

@@ -1,3 +1,18 @@
+<?php
+
+//include(connect.php);
+
+/*    function queryDatabase($query, $db) {
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $dataEntered = $db->commit();
+        return $dataEntered;
+        
+    }
+*/    
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,5 +28,6 @@
         <link rel="stylesheet"
               href="formStyle.css"
               type="text/css"
-              media="screen">	
+              media="screen">
+
     </head>
