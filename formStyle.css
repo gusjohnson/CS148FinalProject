@@ -46,7 +46,9 @@ h1 {
 }
 
 h2 {text-align:center;
-    color:#fafafa;    }
+    color:#fafafa;
+    font-size: 95%;
+}
 
 label {
     color:#ffffff;
@@ -70,6 +72,12 @@ h3 {
 }
 
 
+li{
+    color: #fafafa;
+    font-size: 90%;
+}
+
+
 #page{
     margin: 0 auto 53px;
     width: 95%;
@@ -80,12 +88,13 @@ h3 {
 
 /* header section */
 header{
-    background-color: #fafafa;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-header h1 {
+/* header h1 {
     padding: 0.8em 5.33333333%;
-}
+}*/
 
 /* nav section */
 nav{
@@ -124,12 +133,22 @@ article{
     border-bottom-color: #acacac;
 }
 
+#info{
+    background-color: #121212;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: #acacac;
+}
+
 
 /* form section */
 fieldset{
     margin-left: auto;
     margin-right: auto;
     width: 90%;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: #acacac;
 }
 
 legend{
@@ -147,9 +166,9 @@ legend{
     /*	display: none;*/
 }
 
-#errors ol li{
+/* #errors ol li{
     color: #fffe89;
-}
+}*/
 
 /* footer section */
 footer{
@@ -158,4 +177,10 @@ footer{
     width: 100%;
     //background-color: #fafafa;
     background-color: #121212;
+}
+
+img.header{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

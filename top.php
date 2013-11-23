@@ -1,22 +1,30 @@
 <?php
+session_start();
 
-//include(connect.php);
+require_once("connect.php");
 
-/*    function queryDatabase($query, $db) {
-        $stmt = $db->prepare($query);
-        $stmt->execute();
-        $dataEntered = $db->commit();
-        return $dataEntered;
-        
-    }
-*/    
+function queryDatabase($qry, $dbase) {
+    $dbase->beginTransaction();
+    $dbase->query($qry);
+    $dataEntered = $dbase->commit();
+    return $dataEntered;
+}  
+
+function showDatabaseInfo($qry, $dbase) {
+    $dbase->beginTransaction();
+    $stmt = $dbase->prepare($qry);
+    $stmt->execute();
+    $array = $stmt->fetchAll();
+    $dbase->commit();
+    return $array;
+}
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Online Skate Shop</title>
+        <title>UVM Off-Campus Reference Guide</title>
         <meta charset="utf-8">
         <meta name="author" content="Gus Johnson">
         <meta name="description" content="Get a feel for some of the most famous skateboarding cities around the globe.">

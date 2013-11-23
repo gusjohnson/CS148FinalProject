@@ -36,7 +36,7 @@ function sendMail($to, $subject, $message){
     // of our email so be sure to do that before sending it to this function 
      
     // be sure to change Your Site and yoursite to something meaningful 
-    $mailFrom = "UVM Skate Database <gjohnso4@uvm.edu>"; 
+    $mailFrom = "UVM Off-Campus Reference Guide <gjohnso4@uvm.edu>"; 
 
     $cc = "";  // ex: $cc = "webmaster@yoursite.com"; 
     $bcc = ""; // ex: $bcc = "youremail@yoursite.com"; 

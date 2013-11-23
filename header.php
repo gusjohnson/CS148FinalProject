@@ -1,3 +1,3 @@
 <header>
-    <h1><a href="main.php">FUTURE NICE HEADER</a></h1>
+    <a href="main.php"><img class="header" src="header.jpg"></a>
 </header>

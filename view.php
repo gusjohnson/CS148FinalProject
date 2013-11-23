@@ -1,86 +1,32 @@
 <?php
+session_start();
 $baseURL = "https://www.uvm.edu/~gjohnso4/";
 $folderPath = "cs148/assignment7.1/login/";
-// full URL of this form 
+// full URL of this form
 $yourURL = $baseURL . $folderPath . "view.php";
 
 require_once("connect.php");
+include("top.php");
 
-function queryDatabase($qry, $dbase) {
-    $dbase->beginTransaction();
-    $dbase->query($qry);
-    $dataEntered = $dbase->commit();
-    return $dataEntered;
-}
-
-//############################################################################# 
-// set all form variables to their default value on the form. for testing i set 
-// to my email address. you lose 10% on your grade if you forget to change it. 
+//#############################################################################
+// set all form variables to their default value on the form. for testing i set
+// to my email address. you lose 10% on your grade if you forget to change it.
 
 $email = "";
 $firstName = "";
 $lastName = "";
-$birthday = "";
 $userName = getenv('REMOTE_USER');
+
 
 $mailed = false;
 $success = false;
+$_SESSION['submitted'] = true;
 $messageA = "";
 $messageB = "";
 $messageC = "";
 
-if (isset($_POST["btnSubmit"])) {
 
-    $fromPage = getenv("http_referer");
-
-    if ($fromPage != $yourURL) {
-        die("<p>Sorry you cannot access this page. Security breach detected and reported.</p>");
-    }
-
-
-// gets form values
-    $email = htmlentities($_POST["txtEmail"], ENT_QUOTES, "UTF-8");
-    $firstName = htmlentities($_POST["txtfirstName"], ENT_QUOTES, "UTF-8");
-    $lastName = htmlentities($_POST["txtlastName"], ENT_QUOTES, "UTF-8");
-
-    print "<p>Email: " . $email . "";
-    print "<p>First name: " . $firstName . "<br>";
-
-// e-mail variables
-    $messageA = "<h>Thanks for your submission.</h>";
-    $messageB = "<p>Here is the data you entered:<br><br>E-mail: " . $email . "<br>";
-    $messageB .= "First name: " . $firstName . "<br>Last name: " . $lastName . "</p>";
-    $messageC = "";
-
-    $subject = "UVM Skateboarding Database Contribution";
-    include_once("mailMessage.php");
-    $mailed = sendMail($email, $subject, $messageA . $messageB . $messageC);
-
-    if ($mailed) {
-        echo "Email successful.\n";
-    } else {
-        echo "Email failed.\n";
-    }
-
-    // $db->beginTransaction();
-    $query = 'INSERT INTO tblUser SET fldFirstName = "' . $firstName . '",';
-    $query .= 'fldLastName = "' . $lastName . '";';
-    /* $stmt = $db->prepare($query);
-    $stmt->execute();
-    $success = $db->commit(); */
-    
-    $success = queryDatabase($query, $db);
-
-    if ($success) {
-        echo "Success.";
-    } else {
-        echo "Failure.";
-    }
-}
-
-//} //btnSubmit actions
-
-include ("top.php");
+//include ("top.php");
 
 $ext = pathinfo(basename($_SERVER['PHP_SELF']));
 $file_name = basename($_SERVER['PHP_SELF'], '.' . $ext['extension']);
@@ -89,70 +35,217 @@ print "\n\n";
 print '<body id="' . $file_name . '">';
 print "\n\n";
 
-include ("header.php");
+include ("header2.php");
 //print "\n\n";
 
 include ("menu2.php");
-?> 
+?>
 
 
 <article>
-    <h1>Online Skate Shop</h1>
+    <h1>View Information from Database</h1>
 
     <?php
     echo "<p>Welcome, " . $userName . ".";
     ?>
 
-    <!--   Take out enctype line    --> 
-    <form action="<? print $_SERVER['PHP_SELF']; ?>" 
-          enctype="multipart/form-data" 
-          method="post" 
-          id="frmRegister"> 
-        <fieldset class="Submission"> 
-            <legend>Please Register</legend> 
+    <form action="<? print $_SERVER['PHP_SELF']; ?>"
+          method="post"
+          id="frmRegister">
 
-            <label class="required" for="txtEmail">Email: </label> 
 
-            <input id ="txtEmail" name="txtEmail" class="element text medium<?php
-    if ($emailERROR) {
-        echo ' mistake';
-    }
-    ?>" type="text" maxlength="255" value="<?php echo $email; ?>" placeholder="enter your preferred email address" onfocus="this.select()"  tabindex="30"/> 
-            <br>
-            <label class="required" for="txtfirstName">First Name: </label> 
 
-            <input id ="txtfirstName" name="txtfirstName" class="element text medium<?php
-            if ($firstnameERROR) {
-                echo ' mistake';
+
+        <fieldset class="listbox"><legend>Type</legend><select name="lstTables" value="' . <?php echo $selectedTable; ?> . '" size="1" tabindex="10">';
+                <option value ="tblRestaurants">Restaurants</option>
+                <option value ="tblBars">Bars</option>
+                <option value ="tblRetail">Retail Stores</option>
+                <option value ="tblOther">Other</option>
+            </select><br>
+            <input type='submit'  id='btnView' name='btnTables' value='View Genre' >
+
+            <!--></fieldset><-->
+
+            <?php
+//make a query to get all the tables
+            $selectedTable = htmlentities($_POST["lstTables"], ENT_QUOTES, "UTF-8");
+
+    //Sets up the list for bar selection
+            if (isset($_POST["btnTables"]) AND $selectedTable == "tblBars") { //figure out this SHIT RIGHT HERE
+                $sql = 'SELECT pkBarID, fldName, fldStreet ';
+                $sql .= 'FROM tblBars ';
+                $sql .= 'ORDER BY fldName;';
+                if ($debug)
+                    print "<p>sql " . $sql;
+
+                $names = showDatabaseInfo($sql, $db);
+
+                
+                ?>
+
+
+                <fieldset class="listbox"><legend>Bars</legend><select name="lstBars" value="' . <?php echo $selectedBar; ?> . '" size="1" tabindex="10">
+                        <?php
+                        foreach ($names as $name) {
+                            print '<option value="' . $name['fldName'] . '">' . $name['fldName'] . '</option>\n';
+                        }
+
+                        print "</select>\n";
+                        print "<br><input type='submit'  id='btnView' name='btnView' value='View Info' >";
+                        print "<br></fieldset>\n";
+                        print "</form>\n";
             }
-    ?>" type="text" maxlength="255" value="<?php echo $firstName; ?>" placeholder="enter your first name" onfocus="this.select()"  tabindex="30"/> 
-            <br>
-            <label class="required" for="txtlastName">Last Name: </label> 
+                    ?>
 
-            <input id ="txtlastName" name="txtlastName" class="element text medium<?php
-            if ($lastnameERROR) {
-                echo ' mistake';
-            }
-    ?>" type="text" maxlength="255" value="<?php echo $lastName; ?>" placeholder="enter your last name" onfocus="this.select()"  tabindex="30"/> 
+                    <?php
+                    if (isset($_POST["btnView"])) {
+                        $selectedBar = htmlentities($_POST["lstBars"], ENT_QUOTES, "UTF-8");
+                        $query = 'SELECT fldName, fldStreet FROM tblBars WHERE fldName = "' . $selectedBar . '";';
+                        $attributes = showDatabaseInfo($query, $db);
+
+                        foreach ($attributes as $attribute) {
+                            echo "<ul><li>" . $attribute['fldName']
+                            . "</li><li>" . $attribute['fldStreet'] . "</li></ul><br>";
+                        }
+                    } //response to Get button
+                    ?>
+
+            <?php
+//Sets up the table for restaurant selection
+            if (isset($_POST["btnTables"]) AND $selectedTable == "tblRestaurants") {
+                $sql = 'SELECT pkRestID, fldName, fldStreet ';
+                $sql .= 'FROM tblRestaurants ';
+                $sql .= 'ORDER BY fldName;';
+                if ($debug)
+                    print "<p>sql " . $sql;
+
+                $names = showDatabaseInfo($sql, $db);
+
+                ?>
 
 
-        </fieldset>  
+                <fieldset class="listbox"><legend>Restaurants</legend><select name="lstRestaurants" value="' . <?php echo $selectedRestaurant; ?> . '" size="1" tabindex="10">
+                        <?php
+                        foreach ($names as $name) {
+                            print '<option value="' . $name['fldName'] . '">' . $name['fldName'] . '</option>\n';
+                        }
+
+                        print "</select>\n";
 
 
-        <fieldset class="buttons">
-            <input type="submit" id="btnSubmit" name="btnSubmit" value="Register" tabindex="991" class="button">
-            <input type="reset" id="butReset" name="butReset" value="Reset Form" tabindex="993" class="button" onclick="reSetForm()" > 
-        </fieldset>                     
+                        print "<br>";
+                        print "<input type='submit'  id='btnView' name='btnView' value='View Info' >";
+                        print '<br></fieldset>';
+                        print "</form>\n";
+                    }
+                    ?>
 
-    </form>
-    <br>
+                    <?php
+                    if (isset($_POST["btnView"])) {
+                        $selectedRestaurant = htmlentities($_POST["lstRestaurants"], ENT_QUOTES, "UTF-8");
+//echo $selectedBar;
+                        $query = 'SELECT fldName, fldStreet, fldDescription FROM tblRestaurants WHERE fldName = "' . $selectedRestaurant . '";';
+                        $attributes = showDatabaseInfo($query, $db);
 
-</article> 
+                        foreach ($attributes as $attribute) {
+                            echo "<ul><li>" . $attribute['fldName']
+                            . "</li><li>" . $attribute['fldStreet'] . "</li><li>" . $attribute['fldDescription'] . "</li></ul><br>";
+                        }
+                    } //response to Get button
+                    ?>
+                            
+            <?php
+//Sets up the list for retail selection
+        if (isset($_POST["btnTables"]) AND $selectedTable == "tblRetail") { //figure out this SHIT RIGHT HERE
+            $sql = 'SELECT pkRetailID, fldName, fldStreet, fldDescription ';
+            $sql .= 'FROM tblRetail ';
+            $sql .= 'ORDER BY fldName;';
+            if ($debug)
+                print "<p>sql " . $sql;
 
-<? 
-include ("footer.php"); 
-?> 
+            $names = showDatabaseInfo($sql, $db);
 
-</body> 
+            ?>
 
-</html>
+
+            <fieldset class="listbox"><legend>Retail Stores</legend><select name="lstRetail" value="' . <?php echo $selectedRetail; ?> . '" size="1" tabindex="10">
+                    <?php
+                    foreach ($names as $name) {
+                        print '<option value="' . $name['fldName'] . '">' . $name['fldName'] . '</option>\n';
+                    }
+
+                    print "</select>\n";
+                    print "<br><input type='submit'  id='btnView' name='btnView' value='View Info' >";
+                    print "<br></fieldset>\n";
+                    print "</form>\n";
+                }
+                ?>
+
+                <?php
+                if (isset($_POST["btnView"])) {
+                    $selectedRetail = htmlentities($_POST["lstRetail"], ENT_QUOTES, "UTF-8");
+                    //echo $selectedBar;
+                    $query = 'SELECT fldName, fldStreet, fldDescription FROM tblRetail WHERE fldName = "' . $selectedRetail . '";';
+                    $attributes = showDatabaseInfo($query, $db);
+
+                    foreach ($attributes as $attribute) {
+                        echo "<ul><li>" . $attribute['fldName']
+                        . "</li><li>" . $attribute['fldStreet'] 
+                        . "</li><li>" . $attribute['fldDescription'] . "</li></ul><br>";
+                    }
+                } //response to Get button
+                ?>
+                    
+             <?php
+//Sets up the list for other selection
+        if (isset($_POST["btnTables"]) AND $selectedTable == "tblOther") {
+            $sql = 'SELECT pkOtherID, fldName, fldStreet, fldDescription ';
+            $sql .= 'FROM tblOther ';
+            $sql .= 'ORDER BY fldName;';
+            if ($debug)
+                print "<p>sql " . $sql;
+
+            $names = showDatabaseInfo($sql, $db);
+
+            ?>
+
+
+            <fieldset class="listbox"><legend>Other</legend><select name="lstOther" value="' . <?php echo $selectedOther; ?> . '" size="1" tabindex="10">
+                    <?php
+                    foreach ($names as $name) {
+                        print '<option value="' . $name['fldName'] . '">' . $name['fldName'] . '</option>\n';
+                    }
+
+                    print "</select>\n";
+                    print "<br><input type='submit'  id='btnView' name='btnView' value='View Info' >";
+                    print "<br></fieldset>\n";
+                    print "</form>\n";
+                }
+                ?>
+
+                <?php
+                if (isset($_POST["btnView"])) {
+                    $selectedOther = htmlentities($_POST["lstOther"], ENT_QUOTES, "UTF-8");
+                    //echo $selectedBar;
+                    $query = 'SELECT fldName, fldStreet, fldDescription FROM tblOther WHERE fldName = "' . $selectedOther . '";';
+                    $attributes = showDatabaseInfo($query, $db);
+
+                    foreach ($attributes as $attribute) {
+                        echo "<ul><li>" . $attribute['fldName']
+                        . "</li><li>" . $attribute['fldStreet'] 
+                        . "</li><li>" . $attribute['fldDescription'] . "</li></ul><br>";
+                    }
+                } //response to Get button
+                ?>
+
+
+                <br>
+                </article>
+
+                <?php
+                include ("footer.php");
+                ?>
+
+                </body>
+
+                </html>
