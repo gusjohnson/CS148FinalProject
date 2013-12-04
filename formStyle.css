@@ -62,7 +62,8 @@ legend {
 
 p {color:#fafafa;
    font-family:Georgia, serif;
-   text-indent: 3em; }
+   //text-indent: 3em; 
+}
 
 h3 {
     color: #fafafa;

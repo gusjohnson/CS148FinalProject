@@ -20,7 +20,7 @@ $userName = getenv('REMOTE_USER');
 
 $mailed = false;
 $success = false;
-$_SESSION['submitted'] = true;
+//$_SESSION['submitted'] = true;
 $messageA = "";
 $messageB = "";
 $messageC = "";
@@ -36,7 +36,7 @@ print '<body id="' . $file_name . '">';
 print "\n\n";
 
 include ("header2.php");
-//print "\n\n";
+echo "<br>";
 
 include ("menu2.php");
 ?>
@@ -56,22 +56,21 @@ include ("menu2.php");
 
 
 
-        <fieldset class="listbox"><legend>Type</legend><select name="lstTables" value="' . <?php echo $selectedTable; ?> . '" size="1" tabindex="10">';
+        <fieldset class="listbox"><legend>Type</legend><select name="lstTables" size="1" tabindex="10">
                 <option value ="tblRestaurants">Restaurants</option>
                 <option value ="tblBars">Bars</option>
                 <option value ="tblRetail">Retail Stores</option>
                 <option value ="tblOther">Other</option>
             </select><br>
             <input type='submit'  id='btnView' name='btnTables' value='View Genre' >
-
-            <!--></fieldset><-->
+</fieldset>
 
             <?php
 //make a query to get all the tables
             $selectedTable = htmlentities($_POST["lstTables"], ENT_QUOTES, "UTF-8");
 
     //Sets up the list for bar selection
-            if (isset($_POST["btnTables"]) AND $selectedTable == "tblBars") { //figure out this SHIT RIGHT HERE
+            if (isset($_POST["btnTables"]) AND $selectedTable == "tblBars") { 
                 $sql = 'SELECT pkBarID, fldName, fldStreet ';
                 $sql .= 'FROM tblBars ';
                 $sql .= 'ORDER BY fldName;';
@@ -93,19 +92,20 @@ include ("menu2.php");
                         print "</select>\n";
                         print "<br><input type='submit'  id='btnView' name='btnView' value='View Info' >";
                         print "<br></fieldset>\n";
-                        print "</form>\n";
+                        //print "</form>\n";
             }
                     ?>
 
                     <?php
                     if (isset($_POST["btnView"])) {
                         $selectedBar = htmlentities($_POST["lstBars"], ENT_QUOTES, "UTF-8");
-                        $query = 'SELECT fldName, fldStreet FROM tblBars WHERE fldName = "' . $selectedBar . '";';
+                        $query = 'SELECT fldName, fldStreet, fldDescription FROM tblBars WHERE fldName = "' . $selectedBar . '";';
                         $attributes = showDatabaseInfo($query, $db);
 
                         foreach ($attributes as $attribute) {
                             echo "<ul><li>" . $attribute['fldName']
-                            . "</li><li>" . $attribute['fldStreet'] . "</li></ul><br>";
+                            . "</li><li>" . $attribute['fldStreet'] 
+                            . "</li><li>" . $attribute['fldDescription'] . "</li></ul><br>";
                         }
                     } //response to Get button
                     ?>
@@ -136,7 +136,7 @@ include ("menu2.php");
                         print "<br>";
                         print "<input type='submit'  id='btnView' name='btnView' value='View Info' >";
                         print '<br></fieldset>';
-                        print "</form>\n";
+                        //print "</form>\n";
                     }
                     ?>
 
@@ -177,7 +177,7 @@ include ("menu2.php");
                     print "</select>\n";
                     print "<br><input type='submit'  id='btnView' name='btnView' value='View Info' >";
                     print "<br></fieldset>\n";
-                    print "</form>\n";
+                    //print "</form>\n";
                 }
                 ?>
 
@@ -219,7 +219,7 @@ include ("menu2.php");
                     print "</select>\n";
                     print "<br><input type='submit'  id='btnView' name='btnView' value='View Info' >";
                     print "<br></fieldset>\n";
-                    print "</form>\n";
+                    //print "</form>\n";
                 }
                 ?>
 
@@ -238,7 +238,7 @@ include ("menu2.php");
                 } //response to Get button
                 ?>
 
-
+                    </form>
                 <br>
                 </article>
 

@@ -1,5 +1,6 @@
 <?php
 session_start();
+//$_SESSION['submitted'] = false;
 $baseURL = "https://www.uvm.edu/~gjohnso4/";
 $folderPath = "cs148/assignment7.1/login/";
 // full URL of this form 
@@ -7,12 +8,6 @@ $yourURL = $baseURL . $folderPath . "main2.php";
 
 require_once("connect.php");
 
-/* function queryDatabase($qry, $dbase) {
-    $dbase->beginTransaction();
-    $dbase->query($qry);
-    $dataEntered = $dbase->commit();
-    return $dataEntered;
-}*/
 
 //############################################################################# 
 // set all form variables to their default value on the form. for testing i set 
@@ -25,9 +20,11 @@ $userName = getenv('REMOTE_USER');
 
 include("top.php");
 
+$addUser = 'INSERT INTO tblUsernames SET pkUsername = "' . $userName . '";';
+queryDatabase($addUser, $db);
+
 $mailed = false;
 $success = false;
-$_SESSION['submitted'] = false;
 $messageA = "";
 $messageB = "";
 $messageC = "";
@@ -57,18 +54,14 @@ if (isset($_POST["btnSubmit"])) {
     include_once("mailMessage.php");
     $mailed = sendMail($email, $subject, $messageA . $messageB . $messageC);
 
-    // $db->beginTransaction();
     $query = 'INSERT INTO tblUser SET fldFirstName = "' . $firstName . '",';
-    $query .= 'fldLastName = "' . $lastName . '", fldEmail = "' . $email . '";';
-    /* $stmt = $db->prepare($query);
-    $stmt->execute();
-    $success = $db->commit(); */
+    $query .= 'fldLastName = "' . $lastName . '", fldEmail = "' . $email . '",'
+            . 'fkUsername = "' . $userName . '";';
     
     $success = queryDatabase($query, $db);
 
 }
 
-//} //btnSubmit actions
 
 
 $ext = pathinfo(basename($_SERVER['PHP_SELF']));
@@ -82,6 +75,7 @@ include ("header2.php");
 print "<br>";
 
 include ("menu2.php");
+
 ?> 
 
 
@@ -95,11 +89,11 @@ include ("menu2.php");
             "and begin to feel like a local. The purpose of this website is to " .
             "provide a space to enter or view information about anything students " .
             "might find interesting or helpful. This includes restaurants, bars, " .
-            "supermarkets, gas stations, etc. Please feel free to input your " .
-            "e-mail and name below so we have your record in our database.</p><br>";
+            "supermarkets, gas stations, etc. Please input your " .
+            "e-mail and name below to view or submit to the database.</p><br>";
 
     
-    if (isset($_POST["btnSubmit"]) AND (!$_SESSION['submitted'])) { 
+    if (isset($_POST["btnSubmit"])) { 
             print "<article id='info'><h2>Thanks. Your submission has "; 
 
             if (!$mailed AND !$success) { 
@@ -119,18 +113,19 @@ include ("menu2.php");
             print "</article>";
             $_SESSION['submitted'] = true;
         } 
-        else if ($submitted == true){
-            print "<article id='info'><h2>Thanks for your submission.</h2></article>";
+        else if ($_SESSION['submitted'] == true){
+            print "<article id='info'><h2>Thanks for registering.</h2></article>";
         }
         else { 
             
         ?>
     
+    
     <!--   Take out enctype line    --> 
     <form action="<? print $_SERVER['PHP_SELF']; ?>" 
           enctype="multipart/form-data" 
           method="post" 
-          id="frmRegister"> 
+          id="frmRegister" onsubmit="window.location.reload()"> 
         <fieldset class="Submission"> 
             <legend>Please Register</legend> 
 

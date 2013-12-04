@@ -12,15 +12,12 @@ include("top.php");
 // set all form variables to their default value on the form. for testing i set
 // to my email address. you lose 10% on your grade if you forget to change it.
 
-$email = "";
-$firstName = "";
-$lastName = "";
 $userName = getenv('REMOTE_USER');
 
 
 $mailed = false;
 $success = false;
-$_SESSION['submitted'] = true;
+//$_SESSION['submitted'] = true;
 $messageA = "";
 $messageB = "";
 $messageC = "";
@@ -36,7 +33,7 @@ print '<body id="' . $file_name . '">';
 print "\n\n";
 
 include ("header2.php");
-//print "\n\n";
+echo "<br>";
 
 include ("menu2.php");
 ?>
@@ -57,15 +54,14 @@ include ("menu2.php");
 
 
 
-        <fieldset class="listbox"><legend>Type</legend><select name="lstTables" value="' . <?php echo $selectedTable; ?> . '" size="1" tabindex="10">';
+        <fieldset class="listbox"><legend>Type</legend><select name="lstTables" size="1" tabindex="10">
                 <option value ="tblRestaurants">Restaurants</option>
                 <option value ="tblBars">Bars</option>
                 <option value ="tblRetail">Retail Stores</option>
                 <option value ="tblOther">Other</option>
             </select><br>
             <input type='submit'  id='btnView' name='btnTables' value='View Genre' >
-
-            <!--></fieldset><-->
+        </fieldset>
 
             <?php
             $selectedTable = htmlentities($_POST["lstTables"], ENT_QUOTES, "UTF-8");
@@ -108,7 +104,7 @@ include ("menu2.php");
                         
                         $query = 'INSERT INTO tblBars SET fldName = "' . $barName . '", ';
                         $query .= 'fldStreet = "' . $barStreet . '", fldDescription';
-                        $query .= '= "' . $barDescription . '";';
+                        $query .= '= "' . $barDescription . '", fkUsername = "' . $userName . '";';
                         
                         $success = queryDatabase($query, $db);
                         
@@ -158,7 +154,7 @@ include ("menu2.php");
                         
                         $query = 'INSERT INTO tblRestaurants SET fldName = "' . $restaurantName . '", ';
                         $query .= 'fldStreet = "' . $restaurantStreet . '", fldDescription';
-                        $query .= '= "' . $restaurantDescription . '";';
+                        $query .= '= "' . $restaurantDescription . '", fkUsername = "' . $userName . '";';
                         
                         $success = queryDatabase($query, $db);
                         
@@ -208,7 +204,7 @@ include ("menu2.php");
                         
                         $query = 'INSERT INTO tblRetail SET fldName = "' . $retailName . '", ';
                         $query .= 'fldStreet = "' . $retailStreet . '", fldDescription';
-                        $query .= '= "' . $retailDescription . '";';
+                        $query .= '= "' . $retailDescription . '", fkUsername = "' . $userName . '";';
                         
                         $success = queryDatabase($query, $db);
                         
@@ -258,7 +254,7 @@ include ("menu2.php");
                         
                         $query = 'INSERT INTO tblOther SET fldName = "' . $otherName . '", ';
                         $query .= 'fldStreet = "' . $otherStreet . '", fldDescription';
-                        $query .= '= "' . $otherDescription . '";';
+                        $query .= '= "' . $otherDescription . '", fkUsername = "' . $userName . '";';
                         
                         $success = queryDatabase($query, $db);
                         
@@ -270,7 +266,7 @@ include ("menu2.php");
                     } //response to Submit button
                     ?>
 
-
+    </form>
                 <br>
                 </article>
 
