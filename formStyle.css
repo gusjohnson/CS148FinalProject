@@ -6,7 +6,6 @@ html {
 body{
     margin: 36px auto;
     width: 70%;
-    //background-color:#fafafa
     background-color: #121212;
 }
 
@@ -16,7 +15,6 @@ table {
     border-color: #000000;
     border-collapse: collapse;
     text-align:center;
-    //background-color: #FAFAFA;
     background-color: #121212;
 }
 
@@ -62,7 +60,6 @@ legend {
 
 p {color:#fafafa;
    font-family:Georgia, serif;
-   //text-indent: 3em; 
 }
 
 h3 {
@@ -93,15 +90,8 @@ header{
     margin-right: auto;
 }
 
-/* header h1 {
-    padding: 0.8em 5.33333333%;
-}*/
-
 /* nav section */
 nav{
-    //float: left;
-    //width: 17%;
-    //background-color: #fafafa;
     background-color: #121212;
     border-top-style: dashed;
     border-top-width: 1px;
@@ -109,10 +99,6 @@ nav{
     border-bottom-style: dashed;
     border-bottom-width: 1px;
     border-bottom-color: #acacac;
-}
-
-nav ol {
-    //padding-left: 5.33333333%;
 }
 
 nav ol li{
@@ -127,7 +113,6 @@ nav ol li{
 /* article section */
 
 article{
-    //background-color:#fafafa;
     background-color: #121212;
     border-bottom-style: dashed;
     border-bottom-width: 1px;
@@ -167,16 +152,11 @@ legend{
     /*	display: none;*/
 }
 
-/* #errors ol li{
-    color: #fffe89;
-}*/
-
 /* footer section */
 footer{
     text-align: left;
     float: left;
     width: 100%;
-    //background-color: #fafafa;
     background-color: #121212;
 }
 
